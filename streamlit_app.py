@@ -29,13 +29,16 @@ with st.sidebar:
 if not api_key:
     st.warning("Please enter your API Key in the sidebar to begin.")
 else:
+    genai.configure(api_key=api_key)
+    
+    # --- THIS IS THE BULLETPROOF SECTION ---
     try:
-        genai.configure(api_key=api_key)
-        
-        # This is the most common naming convention for the stable release
-        model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        model = genai.GenerativeModel('gemini-3-flash-preview')
+    except Exception:
+        model = genai.GenerativeModel('gemini-1.5-flash')
+    # ---------------------------------------
 
-        if category == "✨ Magic Captions":
+    if category == "✨ Magic Captions":
             st.header("Magic Captions")
             topic = st.text_input("What is your post about?")
             if st.button("Generate"):
