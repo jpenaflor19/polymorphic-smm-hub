@@ -2,114 +2,120 @@ import streamlit as st
 import google.generativeai as genai
 
 # --- CONFIG ---
-st.set_page_config(page_title="SMM Studio Pro", page_icon="🚀", layout="centered")
+st.set_page_config(page_title="BNDA's SMM Buddy", page_icon="🚀", layout="centered")
 
-# --- YOUR BRANDING LINKS ---
-LOGO_URL = "https://i.postimg.cc/HW7zD6Zg/PNG-1.png"
-BANNER_URL = "https://i.postimg.cc/rpmGhjRd/ME1.png"
+# --- YOUR GITHUB IMAGE LINKS ---
+LOGO_URL = "https://github.com/jpenaflor19/polymorphic-smm-hub/blob/main/PNG%201.png?raw=true"
+BANNER_URL = "https://github.com/jpenaflor19/polymorphic-smm-hub/blob/main/ME1.png?raw=true"
 
-# --- CUSTOM CSS (DARK SAAS THEME) ---
+# --- CUSTOM CSS (GLASSMORPHISM & PREMIUM STYLING) ---
 st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     html, body, [class*="css"] {{ font-family: 'Inter', sans-serif; }}
-    .stApp {{ background-color: #0E1117; color: #FFFFFF; }}
     
-    /* Result Card Styling */
-    .result-card {{
-        background-color: #161B22;
-        padding: 24px;
-        border-radius: 16px;
-        border: 1px solid #30363D;
-        margin-top: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        color: #E6EDF3;
-        line-height: 1.7;
+    .stApp {{
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        color: white;
     }}
     
-    /* Glowing Button */
+    /* Result Card - Frosted Glass Effect */
+    .result-card {{
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        margin-top: 25px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        color: #f0f0f0;
+        line-height: 1.8;
+    }}
+
+    /* Glowing Action Button */
     .stButton>button {{
-        background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-        color: white;
+        background: linear-gradient(45deg, #00dbde, #fc00ff);
         border: none;
-        padding: 15px;
-        border-radius: 12px;
+        color: white;
         font-weight: bold;
+        border-radius: 15px;
+        height: 3.5rem;
         width: 100%;
-        transition: 0.3s ease;
+        transition: 0.4s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }}
     .stButton>button:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 219, 222, 0.4);
     }}
     </style>
     """, unsafe_allow_html=True)
 
 # --- SIDEBAR ---
 with st.sidebar:
-    st.image(LOGO_URL, width=150)
-    st.title("BNDA's SMM Buddy")
-    api_key = st.text_input("Gemini API Key", type="password", placeholder="Enter key to unlock...")
+    st.image(LOGO_URL, width=180)
+    st.markdown("### **SMM Control Center**")
+    api_key = st.text_input("Gemini API Key", type="password", placeholder="Enter key...")
     st.markdown("---")
-    category = st.selectbox("Switch Workspace", [
+    workspace = st.selectbox("Switch Workspace", [
         "📱 Viral Caption Writer", 
         "🎨 AI Graphic Designer", 
         "📈 Trend & Hashtag Hub", 
         "🤝 Smart Engagement"
     ])
-    st.success("System: Online 🟢")
+    st.success("System: Fully Operational 🟢")
 
 # --- MAIN INTERFACE ---
 st.image(BANNER_URL, use_column_width=True)
 
 if not api_key:
-    st.title("Welcome to the Future of SMM")
-    st.write("Your polymorphic AI assistant is ready. Please enter your API Key in the sidebar to start building.")
+    st.title("Ready to scale, BNDA?")
+    st.write("Your polymorphic AI assistant is waiting. Connect your Gemini API Key in the sidebar to unlock the full dashboard.")
 else:
     genai.configure(api_key=api_key)
+    # Using your specific Gemini 3 Flash Preview
     try:
-        # Using the Gemini 3 Flash Preview as seen in your Studio
         model = genai.GenerativeModel('gemini-3-flash-preview')
     except:
         model = genai.GenerativeModel('gemini-1.5-flash')
 
     # --- WORKSPACE: CAPTIONS ---
-    if category == "📱 Viral Caption Writer":
+    if workspace == "📱 Viral Caption Writer":
         st.header("✨ Viral Caption Writer")
-        topic = st.text_input("Post Topic / Context", placeholder="e.g. Benefits of hiring a Virtual Assistant")
+        topic = st.text_input("Post Topic / Context", placeholder="e.g. Tips for scaling a business...")
         if st.button("Generate Content"):
-            with st.spinner("Processing with Gemini 3..."):
-                prompt = f"Act as a viral SMM expert. Create 3 engaging captions for: {topic}. Include hooks, emojis, and CTAs."
+            with st.spinner("AI is thinking..."):
+                prompt = f"Act as a viral SMM expert. Create 3 engaging captions for: {topic}. Use hooks, emojis, and CTAs."
                 res = model.generate_content(prompt)
                 st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
-                st.button("Copy Text (Manual Select)", help="Highlight text above to copy")
 
     # --- WORKSPACE: GRAPHICS ---
-    elif category == "🎨 AI Graphic Designer":
+    elif workspace == "🎨 AI Graphic Designer":
         st.header("🎨 AI Graphic Briefs")
-        desc = st.text_input("What visual do you need?", placeholder="e.g. A futuristic office with a robot assistant")
+        desc = st.text_input("What visual do you need?", placeholder="e.g. A futuristic office...")
         if st.button("Generate Visual Brief"):
-            with st.spinner("Designing prompt..."):
-                prompt = f"Create a professional DALL-E/Midjourney prompt for: {desc}. Make it cinematic and high-end."
+            with st.spinner("Designing..."):
+                prompt = f"Create a detailed AI image prompt for: {desc}. High-end cinematic style."
                 res = model.generate_content(prompt)
-                st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="result-card"><b>Copy this to Midjourney/Canva:</b><br><br>{res.text}</div>', unsafe_allow_html=True)
 
     # --- WORKSPACE: TRENDS ---
-    elif category == "📈 Trend & Hashtag Hub":
+    elif workspace == "📈 Trend & Hashtag Hub":
         st.header("📈 Strategy Hub")
-        niche = st.text_input("Niche / Industry", placeholder="e.g. SaaS, E-commerce, Real Estate")
-        if st.button("Research Trends"):
-            with st.spinner("Analyzing niche..."):
-                prompt = f"Give me 30 categorized hashtags and 3 content pillars for the {niche} niche."
+        niche = st.text_input("Niche / Industry")
+        if st.button("Analyze Trends"):
+            with st.spinner("Researching..."):
+                prompt = f"Strategy for {niche}: 30 hashtags and 3 content ideas."
                 res = model.generate_content(prompt)
                 st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
 
-    # --- WORKSPACE: COMMUNITY ---
-    elif category == "🤝 Smart Engagement":
+    # --- WORKSPACE: ENGAGEMENT ---
+    elif workspace == "🤝 Smart Engagement":
         st.header("🤝 Community Manager")
-        comm = st.text_area("Customer Comment", placeholder="Paste comment here...")
+        comm = st.text_area("Paste Comment:")
         if st.button("Draft Reply"):
             with st.spinner("Thinking..."):
-                prompt = f"Draft a polite and helpful reply to this: {comm}"
-                res = model.generate_content(prompt)
+                res = model.generate_content(f"Draft a reply to: {comm}")
                 st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
