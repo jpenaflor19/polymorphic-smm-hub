@@ -23,48 +23,45 @@ with st.sidebar:
     st.title("🚀 SMM Hub")
     api_key = st.text_input("Enter Gemini API Key", type="password")
     category = st.radio("Select Tool", ["✨ Magic Captions", "#️⃣ Hashtag Lab", "💬 Smart Reply"])
-    st.info("Powered by Gemini 1.5 Flash")
+    st.info("Powered by Gemini 3 Flash")
 
 # --- MAIN LOGIC ---
 if not api_key:
     st.warning("Please enter your API Key in the sidebar to begin.")
 else:
-    genai.configure(api_key=api_key)
-    
-    # --- THIS IS THE BULLETPROOF SECTION ---
     try:
-        model = genai.GenerativeModel('gemini-3-flash-preview')
-    except Exception:
-        model = genai.GenerativeModel('gemini-1.5-flash')
-    # ---------------------------------------
+        genai.configure(api_key=api_key)
+        
+        # This is the Bulletproof model selection
+        try:
+            model = genai.GenerativeModel('gemini-3-flash-preview')
+        except:
+            model = genai.GenerativeModel('gemini-1.5-flash')
 
-    if category == "✨ Magic Captions":
+        if category == "✨ Magic Captions":
             st.header("Magic Captions")
             topic = st.text_input("What is your post about?")
             if st.button("Generate"):
                 with st.spinner("Writing..."):
-                    # Added a safety check for the response
                     response = model.generate_content(f"Act as a viral SMM. Write 3 captions for: {topic}")
-                    if response.text:
-                        st.success("Done!")
-                        st.write(response.text)
-                    else:
-                        st.error("Gemini returned an empty response. Try a different prompt.")
+                    st.success("Done!")
+                    st.write(response.text)
 
         elif category == "#️⃣ Hashtag Lab":
             st.header("Hashtag Lab")
             niche = st.text_input("Your niche (e.g. Vegan Bakery)")
             if st.button("Get Hashtags"):
-                response = model.generate_content(f"Generate 30 hashtags for {niche}")
-                st.code(response.text)
+                with st.spinner("Searching..."):
+                    response = model.generate_content(f"Generate 30 hashtags for {niche} split by reach.")
+                    st.code(response.text)
 
         elif category == "💬 Smart Reply":
             st.header("Smart Reply")
             comment = st.text_area("Paste the comment:")
             if st.button("Draft Reply"):
-                response = model.generate_content(f"Draft a reply to: {comment}")
-                st.info(response.text)
+                with st.spinner("Drafting..."):
+                    response = model.generate_content(f"Draft a polite, engaging reply to: {comment}")
+                    st.info(response.text)
 
     except Exception as e:
-        st.error(f"An error occurred: {e}")
-        st.info("Check if your API Key is active in Google AI Studio and that you have 'Gemini 1.5 Flash' available.")
+        st.error(f"Logic Error: {e}")
