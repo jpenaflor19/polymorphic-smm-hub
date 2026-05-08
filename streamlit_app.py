@@ -7,9 +7,16 @@ st.set_page_config(page_title="Polymorphic AI", layout="wide")
 st.markdown("""
     <style>
     .main { background-color: #f5f7f9; }
-    .stButton>button { width: 100%; border-radius: 20px; height: 3em; background-color: #6200ea; color: white; }
+    .stButton>button { 
+        width: 100%; 
+        border-radius: 20px; 
+        height: 3em; 
+        background-color: #6200ea; 
+        color: white; 
+        font-weight: bold;
+    }
     </style>
-    """, unsafe_allow_index=True)
+    """, unsafe_allow_html=True)
 
 # --- SIDEBAR ---
 with st.sidebar:
