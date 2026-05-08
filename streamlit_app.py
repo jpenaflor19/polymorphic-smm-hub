@@ -30,7 +30,7 @@ if not api_key:
     st.warning("Please enter your API Key in the sidebar to begin.")
 else:
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('models/gemini-1.5-flash')
 
     if category == "✨ Magic Captions":
         st.header("Magic Captions")
