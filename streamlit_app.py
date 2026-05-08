@@ -1,89 +1,115 @@
 import streamlit as st
 import google.generativeai as genai
 
-# --- PAGE CONFIG ---
-st.set_page_config(page_title="Polymorphic SMM AI", page_icon="🚀", layout="centered")
+# --- CONFIG ---
+st.set_page_config(page_title="SMM Studio Pro", page_icon="🚀", layout="centered")
 
-# --- CUSTOM CSS ---
-st.markdown("""
+# --- YOUR BRANDING LINKS ---
+LOGO_URL = "https://i.postimg.cc/HW7zD6Zg/PNG-1.png"
+BANNER_URL = "https://i.postimg.cc/rpmGhjRd/ME1.png"
+
+# --- CUSTOM CSS (DARK SAAS THEME) ---
+st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    .stApp { background-color: #0E1117; color: #FFFFFF; }
-    .result-card {
+    html, body, [class*="css"] {{ font-family: 'Inter', sans-serif; }}
+    .stApp {{ background-color: #0E1117; color: #FFFFFF; }}
+    
+    /* Result Card Styling */
+    .result-card {{
         background-color: #161B22;
-        padding: 25px;
-        border-radius: 15px;
+        padding: 24px;
+        border-radius: 16px;
         border: 1px solid #30363D;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        margin-top: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         color: #E6EDF3;
-        line-height: 1.6;
-    }
-    .stButton>button {
+        line-height: 1.7;
+    }}
+    
+    /* Glowing Button */
+    .stButton>button {{
         background: linear-gradient(90deg, #00d2ff, #3a7bd5);
         color: white;
         border: none;
-        padding: 12px 24px;
+        padding: 15px;
         border-radius: 12px;
         font-weight: bold;
         width: 100%;
-    }
+        transition: 0.3s ease;
+    }}
+    .stButton>button:hover {{
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+    }}
     </style>
     """, unsafe_allow_html=True)
 
-# --- SIDEBAR (LOGO & SETTINGS) ---
+# --- SIDEBAR ---
 with st.sidebar:
-    # REPLACING THIS URL CHANGES YOUR LOGO
-    st.image("https://i.postimg.cc/HW7zD6Zg/PNG-1.png", width=100) 
-    st.title("SMM Studio Pro")
-    api_key = st.text_input("Gemini API Key", type="password")
+    st.image(LOGO_URL, width=150)
+    st.title("BNDA's SMM Buddy")
+    api_key = st.text_input("Gemini API Key", type="password", placeholder="Enter key to unlock...")
     st.markdown("---")
-    category = st.selectbox("Tools", ["📱 Content Writer", "🎨 Image Prompt Gen", "📈 Trend Lab", "🤝 Community"])
-    st.info("Status: Fully Operational 🟢")
+    category = st.selectbox("Switch Workspace", [
+        "📱 Viral Caption Writer", 
+        "🎨 AI Graphic Designer", 
+        "📈 Trend & Hashtag Hub", 
+        "🤝 Smart Engagement"
+    ])
+    st.success("System: Online 🟢")
 
-# --- HEADER IMAGE ---
-# This adds a professional banner at the top
-st.image("https://i.postimg.cc/rpmGhjRd/ME1.png", use_column_width=True)
+# --- MAIN INTERFACE ---
+st.image(BANNER_URL, use_column_width=True)
 
-# --- LOGIC ---
 if not api_key:
     st.title("Welcome to the Future of SMM")
-    st.write("Connect your Gemini API Key in the sidebar to begin generating viral content.")
+    st.write("Your polymorphic AI assistant is ready. Please enter your API Key in the sidebar to start building.")
 else:
     genai.configure(api_key=api_key)
     try:
+        # Using the Gemini 3 Flash Preview as seen in your Studio
         model = genai.GenerativeModel('gemini-3-flash-preview')
     except:
         model = genai.GenerativeModel('gemini-1.5-flash')
 
-    if category == "📱 Content Writer":
-        st.header("✨ Viral Caption Generator")
-        topic = st.text_input("What's the post about?")
-        if st.button("Generate Magic"):
-            with st.spinner("Writing..."):
-                res = model.generate_content(f"Write a viral social media caption for: {topic}. Include a hook and CTA.")
+    # --- WORKSPACE: CAPTIONS ---
+    if category == "📱 Viral Caption Writer":
+        st.header("✨ Viral Caption Writer")
+        topic = st.text_input("Post Topic / Context", placeholder="e.g. Benefits of hiring a Virtual Assistant")
+        if st.button("Generate Content"):
+            with st.spinner("Processing with Gemini 3..."):
+                prompt = f"Act as a viral SMM expert. Create 3 engaging captions for: {topic}. Include hooks, emojis, and CTAs."
+                res = model.generate_content(prompt)
+                st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
+                st.button("Copy Text (Manual Select)", help="Highlight text above to copy")
+
+    # --- WORKSPACE: GRAPHICS ---
+    elif category == "🎨 AI Graphic Designer":
+        st.header("🎨 AI Graphic Briefs")
+        desc = st.text_input("What visual do you need?", placeholder="e.g. A futuristic office with a robot assistant")
+        if st.button("Generate Visual Brief"):
+            with st.spinner("Designing prompt..."):
+                prompt = f"Create a professional DALL-E/Midjourney prompt for: {desc}. Make it cinematic and high-end."
+                res = model.generate_content(prompt)
                 st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
 
-    elif category == "🎨 Image Prompt Gen":
-        st.header("🎨 AI Graphic Briefs")
-        st.write("Describe your vision, and I'll write the prompt for your image generator.")
-        desc = st.text_input("Describe the image idea:")
-        if st.button("Create Prompt"):
-            with st.spinner("Designing..."):
-                res = model.generate_content(f"Write a highly detailed, professional AI image generation prompt for: {desc}. Style: Cinematic, High-Res.")
-                st.markdown(f'<div class="result-card"><b>Copy this into Midjourney/Canva:</b><br><br>{res.text}</div>', unsafe_allow_html=True)
+    # --- WORKSPACE: TRENDS ---
+    elif category == "📈 Trend & Hashtag Hub":
+        st.header("📈 Strategy Hub")
+        niche = st.text_input("Niche / Industry", placeholder="e.g. SaaS, E-commerce, Real Estate")
+        if st.button("Research Trends"):
+            with st.spinner("Analyzing niche..."):
+                prompt = f"Give me 30 categorized hashtags and 3 content pillars for the {niche} niche."
+                res = model.generate_content(prompt)
+                st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
 
-    elif category == "📈 Trend Lab":
-        st.header("📈 Strategy & Hashtags")
-        niche = st.text_input("Niche:")
-        if st.button("Research"):
-            res = model.generate_content(f"Strategy for {niche}")
-            st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
-
-    elif category == "🤝 Community":
-        st.header("🤝 Rapid Response")
-        comm = st.text_area("Comment:")
+    # --- WORKSPACE: COMMUNITY ---
+    elif category == "🤝 Smart Engagement":
+        st.header("🤝 Community Manager")
+        comm = st.text_area("Customer Comment", placeholder="Paste comment here...")
         if st.button("Draft Reply"):
-            res = model.generate_content(f"Draft a reply to: {comm}")
-            st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
+            with st.spinner("Thinking..."):
+                prompt = f"Draft a polite and helpful reply to this: {comm}"
+                res = model.generate_content(prompt)
+                st.markdown(f'<div class="result-card">{res.text}</div>', unsafe_allow_html=True)
