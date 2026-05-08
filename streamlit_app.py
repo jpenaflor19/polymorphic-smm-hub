@@ -35,7 +35,7 @@ st.markdown("""
 # --- SIDEBAR (LOGO & SETTINGS) ---
 with st.sidebar:
     # REPLACING THIS URL CHANGES YOUR LOGO
-    st.image("https://drive.google.com/file/d/1lTEFvjSLdtx1n1hhw7tJTSRCs32dHQbV/view?usp=sharing", width=100) 
+    st.image("https://i.postimg.cc/HW7zD6Zg/PNG-1.png", width=100) 
     st.title("SMM Studio Pro")
     api_key = st.text_input("Gemini API Key", type="password")
     st.markdown("---")
@@ -44,7 +44,7 @@ with st.sidebar:
 
 # --- HEADER IMAGE ---
 # This adds a professional banner at the top
-st.image("https://drive.google.com/file/d/1N11MAOESR1QQnMR11goo7dNtXXpTKZcI/view?usp=sharing", use_column_width=True)
+st.image("https://i.postimg.cc/rpmGhjRd/ME1.png", use_column_width=True)
 
 # --- LOGIC ---
 if not api_key:
