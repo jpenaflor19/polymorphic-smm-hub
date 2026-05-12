@@ -76,7 +76,7 @@ with st.sidebar:
 st.image(BANNER_URL, use_column_width=True)
 
 if not api_key:
-    st.title("Ready to scale, BNDA?")
+    st.title("Ready to scale today?")
     st.write("Connect your Gemini API Key in the sidebar to unlock your Brand-Specific SMM Engine.")
 else:
     genai.configure(api_key=api_key)
