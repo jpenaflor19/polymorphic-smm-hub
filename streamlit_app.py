@@ -63,7 +63,7 @@ with st.sidebar:
     api_key = st.text_input("Gemini API Key", type="password", placeholder="Enter key...")
     st.markdown("---")
     workspace = st.selectbox("Switch Workspace", [
-        "💼 Client Attraction (Sales)", 
+        "💼 Client Attraction (BNDA Main)", 
         "⭐ Recruitment (Hiring)", 
         "🎙️ Delegation Desk Show",
         "💬 Smart Messaging",
@@ -86,7 +86,7 @@ else:
         model = genai.GenerativeModel('gemini-1.5-flash')
 
     # --- WORKSPACE: CLIENT ATTRACTION ---
-    if workspace == "💼 Client Attraction (Sales)":
+    if workspace == "💼 Client Attraction (BNDA Main)":
         st.header("💼 Client Attraction")
         sub_cat = st.radio("Focus:", ["DA Highlight", "Delegation Benefits", "Marketing Hook"])
         topic = st.text_input("What's the specific topic?", placeholder="e.g. Saving time for CEOs")
